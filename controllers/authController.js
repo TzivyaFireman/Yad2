@@ -1,3 +1,6 @@
+require('dotenv').config();
+const TOKEN_SECRET = process.env.TOKEN_SECRET || 3000;
+
 const fsPromises = require('fs').promises;
 const express = require('express');
 const router = express.Router()
@@ -7,8 +10,6 @@ const { UserModel } = require('../services/dbConnection');
 const mongoose = require('mongoose');
 const { log } = require('console');
 const { User } = require('../models/user');
-const TOKEN_SECRET = '*****';
-
 
 const register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);

@@ -1,9 +1,12 @@
+require('dotenv').config();
+const DATABASE_URL = process.env.DATABASE_URL;
+
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 // main().catch(err => console.log(err));
 
 async function main() {
-  await mongoose.connect('mongodb://localhost:27017/Yad2');
+  await mongoose.connect(DATABASE_URL);
 }
 
 

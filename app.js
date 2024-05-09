@@ -1,3 +1,6 @@
+require('dotenv').config();
+const PORT = process.env.PORT;
+
 const express = require('express');
 var cors = require('cors')
 const app = express();
@@ -28,6 +31,6 @@ app.use('/categories', categoryRouter);
 app.use('/products', productRouter);
 
 
-app.listen(3000, () => {
-    console.log(`Server Started at 3000`)
+app.listen(PORT, () => {
+    console.log(`Server Started at` ,PORT)
 })
