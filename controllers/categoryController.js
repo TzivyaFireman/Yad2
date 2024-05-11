@@ -1,4 +1,6 @@
+const { hash } = require('bcrypt');
 const Category = require('../models/category');
+const categoriesService = require('../services/categoriesService');
 
 
 const addCategory = async (req, res, next) => {
@@ -15,16 +17,16 @@ const addCategory = async (req, res, next) => {
 }
 
 
-const getAllCategories = (req, res) => {
-    let categories = []
-    categories.forEach(c => categories.push(c.categoryName));
-    res.send(categories.toSorted((a, b) => a.localCompare(b)));
+const getAllCategories = async (req, res) => {
+    const categories = await categoriesService.getCategories();
+    res.send(categories);
 }
 
 
-const getCategory = (req, res) => {
+const getCategory = async (req, res) => {
     const reqId = Number(req.params.id);
-    category = categories.find(c => c.categoryID === reqId);
+    const categories = await categoriesService.getCategories();
+    const category = categories.find(c => c.categoryID === reqId);
     res.send(category);
 }
 
