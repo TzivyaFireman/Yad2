@@ -1,14 +1,15 @@
 const { hash } = require('bcrypt');
 const Category = require('../models/category');
 const categoriesService = require('../services/categoriesService');
-
+const { ProductModel } = require('../services/dbConnection');
 
 const addCategory = async (req, res, next) => {
     try {
-        let newCategory = new Category();
-        newCategory = req.body;
-        const categ = new Category(newCategory.categoryID, newCategory.categoryName, newCategory.products);
-        categ.save();
+        const { categoryName, categoryID, products } = req.body;
+        const categ = new Category(categoryName, categoryID, products);
+        const allCategories = await categoriesService.getCategories();
+        allCategories.push(categ);
+        categ.save(allCategories);
         res.send("Post API");
     }
     catch (err) {
