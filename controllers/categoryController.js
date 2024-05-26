@@ -35,15 +35,22 @@ const getCategory = async (req, res) => {
 const putCategory = async (req, res, next) => {
     try {
         const reqId = req.params.id;
-        const upCategory = req.body;
-        let category = categories.find((c) => c.categoryID === reqId) || 5
-        if (!category) {
-            return res.status(404).send("הקטגוריה לא נמצא");
+        const { categoryName, categoryID, products } = req.body;
+        const updatedCategory = new Category(categoryID, categoryName, products)
+        const allCategories = await categoriesService.getCategories();
+
+        const categoryIndex = allCategories.findIndex(cat => cat.categoryID === categoryID);
+        if (categoryIndex === -1) {
+            return res.status(404).send("Category not found");
         }
-        for (const key in upCategory) {
-            categories[reqId - 1][key] = upCategory[key];
-        }
-        await fsPromises.writeFile('../categories/allProducts.json', JSON.stringify(categories));
+
+        // Update the category details
+        allCategories[categoryIndex].categoryName = categoryName;
+        allCategories[categoryIndex].products = products;
+
+        await updatedCategory.save(allCategories);
+
+
         res.send("העדכון בוצע בהצלחה");
     } catch (err) {
         next(err);
@@ -53,14 +60,15 @@ const putCategory = async (req, res, next) => {
 
 const deleteCategory = async (req, res, next) => {
     try {
-        const reqId = Number(req.params.id);
-        const category = categories.find(c => c.categoryID === reqId);
-        if (!category) {
+        const reqId = req.params.id;
+        const allCategories = await categoriesService.getCategories();
+        const categoryIndex = allCategories.findIndex(cat => cat.categoryID === Number(reqId));
+        if (categoryIndex === -1) {
             return res.status(404).json({ error: 'Category not found' });
         }
-        index = categories.indexOf(category);
-        categories.splice([reqId - 1], 1);
-        await fsPromises.writeFile('../categories/allProducts.json', JSON.stringify(categories));
+        allCategories.splice([categoryIndex], 1);
+        const categ = new Category();
+        categ.save(allCategories);
         res.send("המחיקה התבצעה בהצחלה!");
     } catch (err) {
         next(err);
