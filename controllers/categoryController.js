@@ -1,7 +1,5 @@
-const { hash } = require('bcrypt');
 const Category = require('../models/category');
 const categoriesService = require('../services/categoriesService');
-const { ProductModel } = require('../services/dbConnection');
 
 const addCategory = async (req, res, next) => {
     try {
@@ -34,17 +32,15 @@ const getCategory = async (req, res) => {
 
 const putCategory = async (req, res, next) => {
     try {
-        const reqId = req.params.id;
+        const reqId = Number(req.params.id);
         const { categoryName, categoryID, products } = req.body;
         const updatedCategory = new Category(categoryID, categoryName, products)
         const allCategories = await categoriesService.getCategories();
-
-        const categoryIndex = allCategories.findIndex(cat => cat.categoryID === categoryID);
+        const categoryIndex = allCategories.findIndex(cat => cat.categoryID === reqId);
         if (categoryIndex === -1) {
-            return res.status(404).send("Category not found");
+            return res.status(404).send("Category nokkt found");
         }
 
-        // Update the category details
         allCategories[categoryIndex].categoryName = categoryName;
         allCategories[categoryIndex].products = products;
 
