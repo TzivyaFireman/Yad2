@@ -2,13 +2,9 @@ require('dotenv').config();
 const TOKEN_SECRET = process.env.TOKEN_SECRET || 3000;
 const usersService = require('../services/usersService');
 
-const express = require('express');
-const router = express.Router()
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { UserModel } = require('../services/dbConnection');
-const mongoose = require('mongoose');
-const { log } = require('console');
 const  User  = require('../models/user');
 
 const register = async (req, res, next) => {
@@ -17,6 +13,7 @@ const register = async (req, res, next) => {
     let newUser = new User(req.body.id, req.body.name, hasPassword);
     try {
         usersService.signUp(newUser)
+        res.send("registration passed successfuly");
     }
     catch (err) {
         next(err)
