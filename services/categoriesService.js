@@ -1,4 +1,3 @@
-const Category = require('../models/category');
 const { ProductModel } = require('./dbConnection');
 
 

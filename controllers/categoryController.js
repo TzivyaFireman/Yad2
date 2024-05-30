@@ -38,7 +38,7 @@ const putCategory = async (req, res, next) => {
         const allCategories = await categoriesService.getCategories();
         const categoryIndex = allCategories.findIndex(cat => cat.categoryID === reqId);
         if (categoryIndex === -1) {
-            return res.status(404).send("Category nokkt found");
+            return res.status(404).send("Category not found");
         }
 
         allCategories[categoryIndex].categoryName = categoryName;
